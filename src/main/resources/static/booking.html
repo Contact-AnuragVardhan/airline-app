@@ -1,0 +1,115 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Login</title>
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+	body {
+		margin: 0;
+		padding: 0;
+		background-color: #17a2b8;
+		height: 100vh;
+	}
+	
+	#login .container #login-row #login-column #login-box {
+		margin-top: 120px;
+		max-width: 600px;
+		height: 320px;
+		border: 1px solid #9C9C9C;
+		background-color: #EAEAEA;
+	}
+	
+	#login .container #login-row #login-column #login-box #login-form {
+		padding: 20px;
+	}
+	
+	#login .container #login-row #login-column #login-box #login-form #register-link {
+		margin-top: -85px;
+	}
+	table {
+  	width:100%;
+    border: 1px solid #DBDBDB;
+  
+    background: #F4F4F4;
+  
+  }
+  
+  table th {
+  	padding: 5px;
+  
+    text-align: center;
+  }
+  
+  table td {
+  
+    border: 1px solid #DBDBDB;
+  
+    padding: 5px;
+  
+    text-align: center;
+  
+    cursor: pointer;
+  
+  }
+	</style>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript"></script>
+</head>
+
+<body>
+	
+	<div id="divCon">
+	</div>
+	
+	<script type="text/javascript">
+	
+	function getBooking()
+	{
+		if(localStorage["airline-app-session"])
+		{
+			var userInfo = JSON.parse(localStorage["airline-app-session"]);
+			
+			var item = {userId:userInfo.id};
+			var xhr = new XMLHttpRequest();
+			xhr.onload = () => {
+			    if (xhr.status >= 200 && xhr.status < 300) {
+			        const response = JSON.parse(xhr.responseText);
+			        if(response && response.length)
+			        {
+			        	render(response);
+			        }
+			    }
+			};
+			xhr.open('POST', "http://localhost:8080/getbooking");
+			xhr.setRequestHeader('Content-Type', 'application/json');
+			var json = JSON.stringify(item);
+			//console.log(json);
+			xhr.send(json);
+		}
+		else
+		{
+			window.location.href = "login.html";
+		}
+	}
+	
+	var render = function(arrData)
+	{
+		var table = '<table id="tblData">'
+        table += '<thead><tr><th>City from</th><th>City To</th><th>Departure</th> <th>Arrival</th> <th>Price</th> </tr></thead>'
+        table += '<tbody>'
+        arrData.forEach((flight,index) => {
+          table += '<tr><td>'+ flight.cityFrom +'</td><td>'+ flight.cityTo +'</td><td>'+ new Date(flight.departure).toLocaleString() +'</td> <td>'+ new Date(flight.arrival).toLocaleString() +'</td> <td>'+ flight.price +'</td> </tr>';
+        })
+        table += '</tbody>'
+        table += '</table>'
+        document.getElementById("divCon").innerHTML = table;
+	}
+	getBooking();
+	</script>
+	
+</body>
+
+</html>

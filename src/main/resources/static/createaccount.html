@@ -1,0 +1,179 @@
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>Registration</title>
+	<!-- Fonts -->
+	<link rel="dns-prefetch" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css?family=Raleway:300,400,600" rel="stylesheet" type="text/css">
+	<link rel="icon" href="Favicon.png">
+	<!-- Bootstrap CSS -->
+	<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+	<style>
+	@import url(https://fonts.googleapis.com/css?family=Raleway:300,400,600);
+	body {
+		margin: 0;
+		font-size: .9rem;
+		font-weight: 400;
+		line-height: 1.6;
+		color: #212529;
+		text-align: left;
+		background-color: #f5f8fa;
+	}
+	
+	.navbar-laravel {
+		box-shadow: 0 2px 4px rgba(0, 0, 0, .04);
+	}
+	
+	.navbar-brand,
+	.nav-link,
+	.my-form,
+	.login-form {
+		font-family: Raleway, sans-serif;
+	}
+	
+	.my-form {
+		padding-top: 1.5rem;
+		padding-bottom: 1.5rem;
+	}
+	
+	.my-form .row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	
+	.login-form {
+		padding-top: 1.5rem;
+		padding-bottom: 1.5rem;
+	}
+	
+	.login-form .row {
+		margin-left: 0;
+		margin-right: 0;
+	}
+	</style>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script type="text/javascript" src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+	function validform() {
+		var a = document.forms["my-form"]["full-name"].value;
+		var b = document.forms["my-form"]["email-address"].value;
+		var c = document.forms["my-form"]["username"].value;
+		var pwd = document.forms["my-form"]["password"].value;
+		var repwd = document.forms["my-form"]["retypepassword"].value;
+		if(a == null || a == "") {
+			alert("Please Enter Your Full Name");
+			return false;
+		} else if(b == null || b == "") {
+			alert("Please Enter Your Email Address");
+			return false;
+		} else if(c == null || c == "") {
+			alert("Please Enter Your Username");
+			return false;
+		} else if(pwd == null || pwd == "") {
+			alert("Please Enter Your Password");
+			return false;
+		} else if(repwd == null || repwd == "") {
+			alert("Please Enter Your Retype Password");
+			return false;
+		} else if(repwd !== pwd) {
+			alert("Your Password and Retype password are not same");
+			return false;
+		}
+		return true;
+	}
+	
+	function register()
+	{
+		if(validform())
+		{
+			var form = document.forms["my-form"];
+			var item = {fullName:form["full-name"].value,email:form["email-address"].value,username:form["username"].value,password:form["password"].value}
+			var xhr = new XMLHttpRequest();
+			xhr.onload = () => {
+			    if (xhr.status >= 200 && xhr.status < 300) {
+			        const response = JSON.parse(xhr.responseText);
+			        if(response && response.success == "true")
+			        {
+			        	alert("You are Registered sucessfully");
+			        	window.location.href = "login.html";
+			        }
+			    }
+			};
+			//var csrftoken = getCookie('csrftoken');
+			xhr.open('POST', "http://localhost:8080/users");
+			xhr.setRequestHeader('Content-Type', 'application/json');
+	        //xhr.setRequestHeader('X-CSRFToken', csrftoken);
+			//var itemSend = {userActivity: arrData};
+			//var json = JSON.stringify(itemSend);
+			var json = JSON.stringify(item);
+			//console.log(json);
+			xhr.send(json);
+		}
+		return false;
+	}
+	</script>
+</head>
+
+<body>
+	<nav class="navbar navbar-expand-lg navbar-light navbar-laravel">
+		<div class="container"> <a class="navbar-brand" href="#">Airline App</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="true" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
+			<div class="navbar-collapse collapse show" id="navbarSupportedContent" style="">
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item"> <a class="nav-link" href="login.html">Login</a> </li>
+					<li class="nav-item"> <a class="nav-link" href="createaccount.html">Register</a> </li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+	<main class="my-form">
+		<div class="cotainer">
+			<div class="row justify-content-center">
+				<div class="col-md-8">
+					<div class="card">
+						<div class="card-header">Register</div>
+						<div class="card-body">
+							<form name="my-form" onsubmit="return register()" action="javascript:void(0);" method="POST">
+								<div class="form-group row">
+									<label for="full_name" class="col-md-4 col-form-label text-md-right">Full Name</label>
+									<div class="col-md-6">
+										<input type="text" id="full_name" class="form-control" name="full-name"> </div>
+								</div>
+								<div class="form-group row">
+									<label for="email_address" class="col-md-4 col-form-label text-md-right">E-Mail Address</label>
+									<div class="col-md-6">
+										<input type="text" id="email_address" class="form-control" name="email-address"> </div>
+								</div>
+								<div class="form-group row">
+									<label for="user_name" class="col-md-4 col-form-label text-md-right">User Name</label>
+									<div class="col-md-6">
+										<input type="text" id="user_name" class="form-control" name="username"> </div>
+								</div>
+								<div class="form-group row">
+									<label for="phone_number" class="col-md-4 col-form-label text-md-right">Password</label>
+									<div class="col-md-6">
+										<input type="password" id="password" class="form-control"> </div>
+								</div>
+								<div class="form-group row">
+									<label for="present_address" class="col-md-4 col-form-label text-md-right">Retype Password</label>
+									<div class="col-md-6">
+										<input type="password" id="retypepassword" class="form-control"> </div>
+								</div>
+								<div class="col-md-6 offset-md-4">
+									<button type="submit" class="btn btn-primary"> Register </button>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</body>
+
+</html>
